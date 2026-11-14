@@ -1,0 +1,60 @@
+# Publishing runs here, not in an `on: release` workflow: a release created
+# with GITHUB_TOKEN triggers no other workflows.
+#
+# The image is built entirely by fvs-build's reusable workflows. This repo owns
+# the pins below; changing one is a commit, and the next release publishes it.
+# If publishing fails, "Re-run failed jobs" reuses the release-please outputs.
+name: release-please
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  release-please:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.rp.outputs.release_created }}
+      version: ${{ steps.rp.outputs.version }}
+    steps:
+      - uses: googleapis/release-please-action@v5
+        id: rp
+
+  native:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    permissions:
+      contents: read
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@ac16e2dfd2ea197c6965d3b17ba75a20362d86c7
+    with:
+      source_repo: USDAForestService/ForestVegetationSimulator
+      source_ref: 2027.1.0
+
+  native-arm64:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    permissions:
+      contents: read
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@ac16e2dfd2ea197c6965d3b17ba75a20362d86c7
+    with:
+      source_repo: USDAForestService/ForestVegetationSimulator
+      source_ref: 2027.1.0
+      arch: aarch64
+
+  image:
+    needs: [release-please, native, native-arm64]
+    permissions:
+      contents: read
+      packages: write
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-container-fvs-workspace.yml@ac16e2dfd2ea197c6965d3b17ba75a20362d86c7
+    with:
+      interface_ref: "20261109"
+      image_name: ghcr.io/vibrant-planet-open-science/fvs-workspace
+      image_tag: ${{ needs.release-please.outputs.version }}
+      image_extra_tags: latest
+      push: true
