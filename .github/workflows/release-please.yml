@@ -30,7 +30,7 @@ jobs:
     if: needs.release-please.outputs.release_created == 'true'
     permissions:
       contents: read
-    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@ac16e2dfd2ea197c6965d3b17ba75a20362d86c7
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@v0.8.0
     with:
       source_repo: USDAForestService/ForestVegetationSimulator
       source_ref: 2027.1.0
@@ -40,7 +40,7 @@ jobs:
     if: needs.release-please.outputs.release_created == 'true'
     permissions:
       contents: read
-    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@ac16e2dfd2ea197c6965d3b17ba75a20362d86c7
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@v0.8.0
     with:
       source_repo: USDAForestService/ForestVegetationSimulator
       source_ref: 2027.1.0
@@ -51,7 +51,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-container-fvs-workspace.yml@ac16e2dfd2ea197c6965d3b17ba75a20362d86c7
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-container-fvs-workspace.yml@v0.8.0
     with:
       interface_ref: "20261109"
       image_name: ghcr.io/vibrant-planet-open-science/fvs-workspace
