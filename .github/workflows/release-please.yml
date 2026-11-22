@@ -30,20 +30,20 @@ jobs:
     if: needs.release-please.outputs.release_created == 'true'
     permissions:
       contents: read
-    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@v0.8.0
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@v0.9.0
     with:
       source_repo: USDAForestService/ForestVegetationSimulator
-      source_ref: 2027.1.0
+      source_ref: 2027.1.1
 
   native-arm64:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'
     permissions:
       contents: read
-    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@v0.8.0
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-native-linux.yml@v0.9.0
     with:
       source_repo: USDAForestService/ForestVegetationSimulator
-      source_ref: 2027.1.0
+      source_ref: 2027.1.1
       arch: aarch64
 
   image:
@@ -51,9 +51,9 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-container-fvs-workspace.yml@v0.8.0
+    uses: Vibrant-Planet-Open-Science/fvs-build/.github/workflows/build-container-fvs-workspace.yml@v0.9.0
     with:
-      interface_ref: "20261109"
+      interface_ref: "20261121"
       image_name: ghcr.io/vibrant-planet-open-science/fvs-workspace
       image_tag: ${{ needs.release-please.outputs.version }}
       image_extra_tags: latest
